@@ -1,11 +1,13 @@
 const express = require("express");
 require("dotenv").config();
 const mongoose = require("mongoose");
+const { MongoClient } = require("mongodb");
 const app = express();
 const ShortUrl = require("./models/shortUrl");
 
-console.log(process.env.MONGO_URI);
-mongoose.connect(process.env.MONGO_URI);
+const uri = process.env.MONGO_URI;
+const client = new MongoClient(uri);
+
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 
@@ -29,4 +31,12 @@ app.get("/:shortUrl", async (req, res) => {
   shortUrl.save();
   res.redirect(shortUrl.full);
 });
-app.listen(process.env.PORT || 3000);
+
+client.connect((err) => {
+  if (err) {
+    console.error(err);
+    return false;
+  }
+  // connection to mongo is successful, listen for requests
+  app.listen(process.env.PORT || 3000);
+});

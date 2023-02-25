@@ -6,8 +6,15 @@ const app = express();
 const ShortUrl = require("./models/shortUrl");
 const PORT = process.env.PORT || 3000;
 
-const uri = process.env.MONGO_URI;
-const client = new MongoClient(uri);
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+};
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
@@ -33,12 +40,7 @@ app.get("/:shortUrl", async (req, res) => {
   res.redirect(shortUrl.full);
 });
 
-client.connect((err) => {
-  if (err) {
-    console.error(err);
-    return false;
-  }
-  // connection to mongo is successful, listen for requests
+connectDB().then(() => {
   app.listen(PORT, () => {
     console.log("listening for requests");
   });

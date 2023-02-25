@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const { MongoClient } = require("mongodb");
 const app = express();
 const ShortUrl = require("./models/shortUrl");
+const PORT = process.env.PORT || 3000;
 
 const uri = process.env.MONGO_URI;
 const client = new MongoClient(uri);
@@ -38,5 +39,7 @@ client.connect((err) => {
     return false;
   }
   // connection to mongo is successful, listen for requests
-  app.listen(process.env.PORT || 3000);
+  app.listen(PORT, () => {
+    console.log("listening for requests");
+  });
 });

@@ -1,3 +1,7 @@
+# URL Shortener
+
+This is a URL shortening service built with Node.js and MongoDB that allows users to create shortened URLs that redirect to their full URL. The project is already deployed at https://dead-pink-eagle-slip.cyclic.app/.
+
 ## Installation
 
 Install my-project with npm
